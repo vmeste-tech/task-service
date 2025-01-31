@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: kolpakovee
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deadline
+                  type: TIMESTAMP
+              - column:
+                  name: apartment_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: assigned_to
+                  type: UUID
+              - column:
+                  name: category
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+      rollback:
+        - dropTable:
+            tableName: tasks
