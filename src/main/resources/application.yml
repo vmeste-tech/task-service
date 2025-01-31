@@ -6,7 +6,7 @@ spring:
     name: task-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/user_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/task_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
   jpa:
@@ -21,4 +21,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/test-realm
+          issuer-uri: ${SECURITY_RESOURCE_SERVER_URL:http://localhost:8080/realms/test-realm}
+
+integration:
+  services:
+    user-service:
+      url: ${INTEGRATION_USER_SERVICE_URL:http://localhost:8082}
+      name: ${INTEGRATION_USER_SERVICE_NAME:user-service}

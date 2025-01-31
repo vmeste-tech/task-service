@@ -7,7 +7,8 @@ import ru.kolpakovee.taskservice.models.GetUserResponse;
 
 import java.util.UUID;
 
-@FeignClient(name = "user-service", url = "http://localhost:8082")
+@FeignClient(name = "${integration.services.user-service.name}",
+        url = "${integration.services.user-service.url}")
 public interface UserServiceClient {
 
     @GetMapping("/api/users/v1/{id}")

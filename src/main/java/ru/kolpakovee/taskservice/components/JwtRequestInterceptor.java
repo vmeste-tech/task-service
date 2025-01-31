@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import ru.kolpakovee.taskservice.constants.AuthConstants;
 
 @Slf4j
 public class JwtRequestInterceptor implements RequestInterceptor {
@@ -15,6 +16,6 @@ public class JwtRequestInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate requestTemplate) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt oauthToken = (Jwt) authentication.getCredentials();
-        requestTemplate.header(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken.getTokenValue());
+        requestTemplate.header(HttpHeaders.AUTHORIZATION, AuthConstants.BEARER + oauthToken.getTokenValue());
     }
 }
