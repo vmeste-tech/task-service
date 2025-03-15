@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.kolpakovee.taskservice.enums.TaskCategory;
 import ru.kolpakovee.taskservice.enums.TaskStatus;
+import ru.kolpakovee.taskservice.models.ChangeStatusResponse;
 import ru.kolpakovee.taskservice.models.CreateTaskRequest;
 import ru.kolpakovee.taskservice.models.TaskDto;
 import ru.kolpakovee.taskservice.services.TaskService;
@@ -26,17 +27,17 @@ public class TaskController {
         return taskService.create(request);
     }
 
-//    @PatchMapping("/{taskId}/status")
-//    public ChangeStatucResponse changeStatus(@PathVariable UUID taskId, @RequestParam TaskStatus status) {
-//        return taskService.changeStatus(taskId, status);
-//    }
-//
-//    @GetMapping("/{apartmentId}")
-//    public List<TaskDto> getTasks(@PathVariable UUID apartmentId,
-//                                  @RequestParam(required = false) TaskStatus status,
-//                                  @RequestParam(required = false) TaskCategory category) {
-//        return taskService.getTasks();
-//    }
+    @PatchMapping("/{taskId}/status")
+    public ChangeStatusResponse changeStatus(@PathVariable UUID taskId, @RequestParam TaskStatus status) {
+        return taskService.changeStatus(taskId, status);
+    }
+
+    @GetMapping("/{apartmentId}")
+    public List<TaskDto> getTasks(@PathVariable UUID apartmentId,
+                                  @RequestParam(required = false) TaskStatus status,
+                                  @RequestParam(required = false) TaskCategory category) {
+        return taskService.getTasks(apartmentId, status, category);
+    }
 //
 //    @GetMapping("/{taskId}/history")
 //    public List<TaskHistoryDto> getTaskHistory(@PathVariable UUID taskId) {
