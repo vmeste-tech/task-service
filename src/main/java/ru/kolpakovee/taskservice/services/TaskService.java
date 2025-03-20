@@ -110,7 +110,7 @@ public class TaskService {
                         && (task.scheduledAt().isEqual(currentOccurrence) || task.scheduledAt().isBefore(currentOccurrence)))
                 .max(Comparator.comparing(TaskDto::scheduledAt));
 
-        int startIndex = 0;
+        int startIndex = -1;
         if (lastTaskOpt.isPresent()) {
             UUID startingUser = lastTaskOpt.get().assignedTo();
             startIndex = IntStream.range(0, activeUsers.size())
@@ -118,10 +118,8 @@ public class TaskService {
                     .findFirst()
                     .orElse(0);
         }
-        long tasksCountForRule = existingTasks.stream()
-                .filter(task -> task.ruleId().equals(rule.id()))
-                .count();
-        int userIndex = (startIndex + (int) tasksCountForRule) % activeUsers.size();
+
+        int userIndex = (startIndex + 1) % activeUsers.size();
         return activeUsers.get(userIndex);
     }
 }
