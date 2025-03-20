@@ -125,18 +125,3 @@ public class TaskService {
         return activeUsers.get(userIndex);
     }
 }
-
-// Хочу узнать все задачи на текущий месяц
-// правило: мыть полы по ПТ, пылесосить по ПНД
-// пользователи: Е, Т
-// задачи: помыть пол 21.03 Е, пылесосить 24 Т
-// для каждого правила выписываем все дни за период времени
-// мыть полы: 21 28 4 11, пылесосить 24 31 7 14
-
-// list<task> tasks = getTasks()
-// for (r: rules)
-//    list<day> days = r.getDays()
-//    for (d: days)
-//       for (activeUser: users)
-//          tasks.contains(r, d) ? skip : tasks.add()
-//

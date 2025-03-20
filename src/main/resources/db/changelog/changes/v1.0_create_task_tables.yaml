@@ -26,9 +26,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: deadline
-                  type: TIMESTAMP
-              - column:
                   name: apartment_id
                   type: UUID
                   constraints:
@@ -41,11 +38,6 @@ databaseChangeLog:
               - column:
                   name: assigned_to
                   type: UUID
-              - column:
-                  name: category
-                  type: VARCHAR(50)
-                  constraints:
-                    nullable: false
 
       rollback:
         - dropTable:

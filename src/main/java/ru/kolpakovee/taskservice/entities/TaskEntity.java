@@ -2,17 +2,14 @@ package ru.kolpakovee.taskservice.entities;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.kolpakovee.taskservice.enums.TaskCategory;
 import ru.kolpakovee.taskservice.enums.TaskStatus;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -36,9 +33,6 @@ public class TaskEntity {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status = TaskStatus.CREATED;
 
-    @FutureOrPresent
-    private LocalDateTime deadline;
-
     @NotNull
     private UUID apartmentId;
 
@@ -53,7 +47,4 @@ public class TaskEntity {
 
     @Nullable
     private UUID assignedTo;
-
-    @Enumerated(value = EnumType.STRING)
-    private TaskCategory category;
 }
