@@ -42,9 +42,6 @@ public class TaskEntity {
     @Column(nullable = false)
     private ZonedDateTime scheduledAt;
 
-    @NotNull
-    private UUID createdBy;
-
     @Nullable
     private UUID assignedTo;
 }

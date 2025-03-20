@@ -31,11 +31,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: created_by
-                  type: UUID
-                  constraints:
-                    nullable: false
-              - column:
                   name: assigned_to
                   type: UUID
 

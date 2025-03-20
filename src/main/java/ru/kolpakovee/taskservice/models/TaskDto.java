@@ -14,7 +14,6 @@ public record TaskDto(
         TaskStatus status,
         ZonedDateTime scheduledAt,
         UUID apartmentId,
-        UUID createdBy,
         UUID assignedTo,
         UUID ruleId
 ) {

@@ -16,7 +16,7 @@ public interface TaskMapper {
 
     TaskDto toDto(TaskEntity taskEntity);
 
-    @Mapping(target = "status", ignore = true) // Игнорируем статус при основном маппинге
+    @Mapping(target = "status", ignore = true)
     TaskEntity toEntity(CreateTaskRequest request);
 
     @AfterMapping

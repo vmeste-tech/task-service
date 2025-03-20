@@ -1,31 +1,20 @@
 package ru.kolpakovee.taskservice.models;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import ru.kolpakovee.taskservice.enums.TaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public record CreateTaskRequest(
-
-        @NotBlank
-        @Size(max = 100)
-        String title,
-
-        @Size(max = 500)
-        String description,
-
-        @FutureOrPresent
-        LocalDateTime deadline,
-
-        @NotNull
-        UUID apartmentId,
-
-        @NotNull
-        UUID createdBy,
-
-        UUID assignedTo
+        @Size(max = 100) String title,
+        @Size(max = 500) String description,
+        TaskStatus status,
+        @NotNull UUID apartmentId,
+        @Nullable UUID ruleId,
+        @NotNull ZonedDateTime scheduledAt,
+        @Nullable UUID assignedTo
 ) {
 }

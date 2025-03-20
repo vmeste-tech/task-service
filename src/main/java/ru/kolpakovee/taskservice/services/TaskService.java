@@ -30,7 +30,6 @@ public class TaskService {
 
     @Transactional
     public TaskDto create(CreateTaskRequest request) {
-        // TODO: может стоит проверить существование квартиры?
         TaskEntity taskEntity = TaskMapper.INSTANCE.toEntity(request);
         taskEntity = taskRepository.save(taskEntity);
 
@@ -93,7 +92,7 @@ public class TaskService {
     private boolean taskExists(List<TaskDto> tasks, UUID ruleId, ZonedDateTime occurrence) {
         return tasks.stream()
                 .anyMatch(task -> task.ruleId().equals(ruleId)
-                        && task.scheduledAt().equals(occurrence));
+                        && task.scheduledAt().toInstant().equals(occurrence.toInstant()));
     }
 
     /**
