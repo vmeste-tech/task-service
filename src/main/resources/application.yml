@@ -28,6 +28,9 @@ integration:
     user-service:
       url: ${INTEGRATION_USER_SERVICE_URL:http://localhost:8082}
       name: ${INTEGRATION_USER_SERVICE_NAME:user-service}
+    rules-service:
+      url: ${INTEGRATION_RULES_SERVICE_URL:http://localhost:8084}
+      name: ${INTEGRATION_RULES_SERVICE_NAME:rules-service}
 
 logging:
   level:

@@ -5,33 +5,21 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import ru.kolpakovee.taskservice.enums.UserStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Value
 @Builder
-@Jacksonized
-public class GetUserResponse {
-
-    @NotNull
-    String id;
-
-    @NotEmpty
-    String username;
-
-    @Email
-    String email;
-
-    @NotEmpty
-    String firstName;
-
-    @NotEmpty
-    String lastName;
-
-    @Nullable
-    String profilePictureUrl;
-
-    LocalDateTime createdAt;
+public record GetUserResponse(
+        @NotNull UUID id,
+        @Email String email,
+        @NotEmpty
+        String firstName,
+        @NotEmpty
+        String lastName,
+        @Nullable String profilePictureUrl,
+        LocalDateTime createdAt,
+        @NotNull UserStatus status
+) {
 }

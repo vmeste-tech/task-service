@@ -13,6 +13,7 @@ import ru.kolpakovee.taskservice.enums.TaskCategory;
 import ru.kolpakovee.taskservice.enums.TaskStatus;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity(name = "tasks")
@@ -40,6 +41,12 @@ public class TaskEntity {
 
     @NotNull
     private UUID apartmentId;
+
+    @Nullable
+    private UUID ruleId;
+
+    @Column(nullable = false)
+    private ZonedDateTime scheduledAt;
 
     @NotNull
     private UUID createdBy;
