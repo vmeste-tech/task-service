@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: kolpakovee
+      changes:
+        - addColumn:
+            tableName: tasks
+            columns:
+              - column:
+                  name: is_penalty_created
+                  type: boolean
+      rollback:
+        - dropColumn:
+            tableName: tasks
+            columnName: is_penalty_created

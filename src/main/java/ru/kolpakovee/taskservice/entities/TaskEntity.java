@@ -44,4 +44,7 @@ public class TaskEntity {
 
     @Nullable
     private UUID assignedTo;
+
+    @NotNull
+    private boolean isPenaltyCreated = false;
 }

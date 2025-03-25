@@ -15,6 +15,7 @@ public record TaskDto(
         ZonedDateTime scheduledAt,
         UUID apartmentId,
         UUID assignedTo,
-        UUID ruleId
+        UUID ruleId,
+        boolean isPenaltyCreated
 ) {
 }

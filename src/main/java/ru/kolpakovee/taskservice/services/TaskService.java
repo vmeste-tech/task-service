@@ -68,6 +68,7 @@ public class TaskService {
                 if (!taskExists(tasks, rule.id(), date)) {
                     GetUserResponse assignedUser = assignUser(rule, date, activeUsers, tasks);
                     TaskDto newTask = TaskDto.builder()
+                            .id(UUID.randomUUID())
                             .status(TaskStatus.CREATED)
                             .ruleId(rule.id())
                             .apartmentId(apartmentId)
@@ -75,6 +76,7 @@ public class TaskService {
                             .assignedTo(assignedUser.id())
                             .scheduledAt(date)
                             .description(rule.description())
+                            .isPenaltyCreated(false)
                             .build();
                     tasks.add(newTask);
                 }
@@ -84,6 +86,10 @@ public class TaskService {
         tasks.sort(Comparator.comparing(TaskDto::scheduledAt));
 
         return tasks;
+    }
+
+    public void deleteTask(UUID taskId) {
+        taskRepository.deleteById(taskId);
     }
 
     /**
@@ -120,5 +126,13 @@ public class TaskService {
 
         int userIndex = (startIndex + 1) % activeUsers.size();
         return activeUsers.get(userIndex);
+    }
+
+    public List<TaskDto> getOverdueTasks(UUID apartmentId) {
+        return taskRepository.findByApartmentId(apartmentId).stream()
+                .map(TaskMapper.INSTANCE::toDto)
+                .filter(t -> t.scheduledAt().isBefore(ZonedDateTime.now()))
+                .filter(t -> !t.status().equals(TaskStatus.COMPLETED))
+                .toList();
     }
 }
