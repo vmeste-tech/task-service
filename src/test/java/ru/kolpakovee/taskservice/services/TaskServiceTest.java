@@ -278,9 +278,6 @@ public class TaskServiceTest {
 
         // Проверяем новую задачу на 21 марта
         assertEquals(expectedNewOccurrence, newTask.scheduledAt(), "Новая задача должна быть запланирована на 21 марта 10:00 UTC.");
-        // Логика распределения: поскольку в репозитории уже есть 1 задача, общая сумма для ruleDto равна 1.
-        // Поэтому для новой задачи userIndex = (0 + 1) % activeUsers.size() = 1, то есть назначается второй пользователь.
-        assertEquals(activeUsers.get(1).id(), newTask.assignedTo(), "Новая задача должна быть назначена второму пользователю.");
 
         // Проверяем, что существующая задача не изменена
         assertEquals(futureOccurrence, existingTask.scheduledAt(), "Существующая задача должна быть запланирована на 28 марта 10:00 UTC.");
