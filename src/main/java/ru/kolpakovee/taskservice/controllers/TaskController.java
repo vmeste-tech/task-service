@@ -6,12 +6,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import ru.kolpakovee.taskservice.enums.TaskStatus;
 import ru.kolpakovee.taskservice.models.ChangeStatusResponse;
 import ru.kolpakovee.taskservice.models.CreateTaskRequest;
 import ru.kolpakovee.taskservice.models.TaskDto;
 import ru.kolpakovee.taskservice.services.TaskService;
+import ru.kolpakovee.taskservice.utils.JwtUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,26 +48,22 @@ public class TaskController {
 
     @PostMapping
     @Operation(summary = "Создание задачи", description = "Позволяет создать задачу")
-    public TaskDto create(@RequestBody @Valid CreateTaskRequest request) {
-        return taskService.create(request);
+    public TaskDto create(@RequestBody @Valid CreateTaskRequest request, @AuthenticationPrincipal Jwt jwt) {
+        return taskService.create(request, JwtUtils.getUserId(jwt));
     }
 
     @PatchMapping("/{taskId}/status")
     @Operation(summary = "Изменение статуса задачи", description = "Позволяет создать задачу")
-    public ChangeStatusResponse changeStatus(@PathVariable UUID taskId, @RequestParam TaskStatus status) {
-        return taskService.changeStatus(taskId, status);
+    public ChangeStatusResponse changeStatus(@PathVariable UUID taskId, @RequestParam TaskStatus status,
+                                             @AuthenticationPrincipal Jwt jwt) {
+        return taskService.changeStatus(taskId, status, JwtUtils.getUserId(jwt));
     }
 
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Удаление задачи",
             description = "Позволяет удалить задачу")
-    public void deleteTask(@PathVariable UUID taskId) {
-        taskService.deleteTask(taskId);
+    public void deleteTask(@PathVariable UUID taskId, @AuthenticationPrincipal Jwt jwt) {
+        taskService.deleteTask(taskId, JwtUtils.getUserId(jwt));
     }
-
-//    @GetMapping("/{taskId}/history")
-//    public List<TaskHistoryDto> getTaskHistory(@PathVariable UUID taskId) {
-//        return taskHistoryService.getHistory(taskId);
-//    }
 }

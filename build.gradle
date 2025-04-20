@@ -38,6 +38,8 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'com.cronutils:cron-utils:9.2.1'
 
+	implementation 'org.springframework.kafka:spring-kafka:3.3.4'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'

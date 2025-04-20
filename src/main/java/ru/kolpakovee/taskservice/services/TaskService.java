@@ -6,12 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kolpakovee.taskservice.clients.RulesServiceClient;
 import ru.kolpakovee.taskservice.clients.UserServiceClient;
+import ru.kolpakovee.taskservice.constants.NotificationMessages;
 import ru.kolpakovee.taskservice.entities.TaskEntity;
 import ru.kolpakovee.taskservice.enums.RuleStatus;
 import ru.kolpakovee.taskservice.enums.TaskStatus;
 import ru.kolpakovee.taskservice.enums.UserStatus;
 import ru.kolpakovee.taskservice.mappers.TaskMapper;
 import ru.kolpakovee.taskservice.models.*;
+import ru.kolpakovee.taskservice.producer.NotificationEventProducer;
 import ru.kolpakovee.taskservice.repositories.TaskRepository;
 
 import java.time.LocalDate;
@@ -28,21 +30,25 @@ public class TaskService {
     private final RulesServiceClient rulesServiceClient;
     private final UserServiceClient userServiceClient;
 
+    private final NotificationEventProducer producer;
+
     @Transactional
-    public TaskDto create(CreateTaskRequest request) {
+    public TaskDto create(CreateTaskRequest request, UUID userId) {
         TaskEntity taskEntity = TaskMapper.INSTANCE.toEntity(request);
         taskEntity = taskRepository.save(taskEntity);
-
+        producer.send(userId, NotificationMessages.CREATE_TASK);
         return TaskMapper.INSTANCE.toDto(taskEntity);
     }
 
     @Transactional
-    public ChangeStatusResponse changeStatus(UUID taskId, TaskStatus status) {
+    public ChangeStatusResponse changeStatus(UUID taskId, TaskStatus status, UUID userId) {
         TaskEntity taskEntity = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Задача для обновления статуса не найдена."));
 
         taskEntity.setStatus(status);
         taskEntity = taskRepository.save(taskEntity);
+
+        producer.send(userId, NotificationMessages.CHANGE_TASK_STATUS);
 
         return new ChangeStatusResponse(taskEntity.getId(), taskEntity.getStatus());
     }
@@ -88,7 +94,8 @@ public class TaskService {
         return tasks;
     }
 
-    public void deleteTask(UUID taskId) {
+    public void deleteTask(UUID taskId, UUID userId) {
+        producer.send(userId, NotificationMessages.REMOVE_TASK);
         taskRepository.deleteById(taskId);
     }
 
