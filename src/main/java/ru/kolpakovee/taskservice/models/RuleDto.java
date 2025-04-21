@@ -2,6 +2,7 @@ package ru.kolpakovee.taskservice.models;
 
 
 import com.cronutils.model.Cron;
+import com.cronutils.model.CronType;
 import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.cronutils.model.CronType.QUARTZ;
 import static com.cronutils.model.definition.CronDefinitionBuilder.instanceDefinitionFor;
 
 public record RuleDto(
@@ -32,7 +32,7 @@ public record RuleDto(
      * когда правило должно сработать согласно cron-выражению.
      */
     public List<ZonedDateTime> getOccurrenceDateTimes(LocalDate startDate, LocalDate endDate) {
-        CronDefinition cronDefinition = instanceDefinitionFor(QUARTZ);
+        CronDefinition cronDefinition = instanceDefinitionFor(CronType.UNIX);
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse(this.cronExpression);
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
