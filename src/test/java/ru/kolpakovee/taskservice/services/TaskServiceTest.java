@@ -65,7 +65,7 @@ public class TaskServiceTest {
                 "Test Rule Description",
                 RuleStatus.ACCEPTED,
                 0.0,
-                "0 0 10 ? * TUE", // каждый вторник в 10:00 UTC
+                "0 10 * * 2", // каждый вторник в 10:00 UTC (UNIX CRON)
                 "UTC"
         );
 
@@ -75,7 +75,7 @@ public class TaskServiceTest {
                 "Test Rule 2 Description",
                 RuleStatus.ACCEPTED,
                 0.0,
-                "0 0 15 ? * THU", // каждый четверг в 15:00 UTC
+                "0 15 * * 4", // каждый четверг в 15:00 UTC (UNIX CRON)
                 "UTC"
         );
 
@@ -99,15 +99,11 @@ public class TaskServiceTest {
 
         activeUsers = Arrays.asList(user1, user2);
 
-        // По умолчанию в репозитории нет задач для этой квартиры
         when(taskRepository.findByApartmentId(apartmentId)).thenReturn(Collections.emptyList());
-
-        // Сервис правил возвращает правило по умолчанию (если не переопределено в конкретном тесте)
         when(rulesServiceClient.getApartmentRules(apartmentId)).thenReturn(List.of(ruleDto));
-
-        // Сервис пользователей возвращает список активных пользователей
         when(userServiceClient.getApartmentUsers(apartmentId)).thenReturn(activeUsers);
     }
+
 
     /**
      * Тест: несколько правил, и в БД нет существующих задач.
