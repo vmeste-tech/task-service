@@ -39,9 +39,3 @@ integration:
     rules-service:
       url: ${INTEGRATION_RULES_SERVICE_URL:http://localhost:8084}
       name: ${INTEGRATION_RULES_SERVICE_NAME:rules-service}
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG

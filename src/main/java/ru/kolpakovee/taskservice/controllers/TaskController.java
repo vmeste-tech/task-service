@@ -52,11 +52,11 @@ public class TaskController {
         return taskService.create(request, JwtUtils.getUserId(jwt));
     }
 
-    @PatchMapping("/{taskId}/status")
+    @PatchMapping("/status")
     @Operation(summary = "Изменение статуса задачи", description = "Позволяет создать задачу")
-    public ChangeStatusResponse changeStatus(@PathVariable UUID taskId, @RequestParam TaskStatus status,
+    public ChangeStatusResponse changeStatus(@RequestBody TaskDto task,
                                              @AuthenticationPrincipal Jwt jwt) {
-        return taskService.changeStatus(taskId, status, JwtUtils.getUserId(jwt));
+        return taskService.changeStatus(task, JwtUtils.getUserId(jwt));
     }
 
     @DeleteMapping("/{taskId}")

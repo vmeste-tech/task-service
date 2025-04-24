@@ -41,13 +41,18 @@ public class TaskService {
     }
 
     @Transactional
-    public ChangeStatusResponse changeStatus(UUID taskId, TaskStatus status, UUID userId) {
-        TaskEntity taskEntity = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Задача для обновления статуса не найдена."));
+    public ChangeStatusResponse changeStatus(TaskDto task, UUID userId) {
+        TaskEntity taskEntity;
+        Optional<TaskEntity> existingTask = taskRepository.findById(task.id());
 
-        taskEntity.setStatus(status);
+        if (existingTask.isPresent()) {
+            taskEntity = existingTask.get();
+            taskEntity.setStatus(task.status());
+        } else {
+            taskEntity = TaskMapper.INSTANCE.toEntity(task);
+        }
+
         taskEntity = taskRepository.save(taskEntity);
-
         producer.send(userId, NotificationMessages.CHANGE_TASK_STATUS);
 
         return new ChangeStatusResponse(taskEntity.getId(), taskEntity.getStatus());

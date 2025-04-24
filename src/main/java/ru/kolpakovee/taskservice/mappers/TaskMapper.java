@@ -19,6 +19,9 @@ public interface TaskMapper {
     @Mapping(target = "status", ignore = true)
     TaskEntity toEntity(CreateTaskRequest request);
 
+    @Mapping(target = "id", ignore = true)
+    TaskEntity toEntity(TaskDto taskDto);
+
     @AfterMapping
     default void setDefaultStatus(@MappingTarget TaskEntity taskEntity) {
         if (taskEntity.getStatus() == null) {
