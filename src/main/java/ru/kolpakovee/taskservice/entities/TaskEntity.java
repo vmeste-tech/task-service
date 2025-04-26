@@ -31,6 +31,7 @@ public class TaskEntity {
     private String description;
 
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     private TaskStatus status = TaskStatus.CREATED;
 
     @NotNull
@@ -46,5 +47,7 @@ public class TaskEntity {
     private UUID assignedTo;
 
     @NotNull
-    private boolean isPenaltyCreated = false;
+    @Builder.Default
+    @Column(name = "is_penalty_created")
+    private boolean penaltyCreated = false;
 }

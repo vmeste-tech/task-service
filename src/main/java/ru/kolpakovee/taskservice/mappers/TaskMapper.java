@@ -17,6 +17,8 @@ public interface TaskMapper {
     TaskDto toDto(TaskEntity taskEntity);
 
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "penaltyCreated", ignore = true)
     TaskEntity toEntity(CreateTaskRequest request);
 
     @Mapping(target = "id", ignore = true)

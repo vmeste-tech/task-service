@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import ru.kolpakovee.taskservice.enums.TaskStatus;
 import ru.kolpakovee.taskservice.models.ChangeStatusResponse;
 import ru.kolpakovee.taskservice.models.CreateTaskRequest;
 import ru.kolpakovee.taskservice.models.TaskDto;
@@ -57,6 +56,12 @@ public class TaskController {
     public ChangeStatusResponse changeStatus(@RequestBody TaskDto task,
                                              @AuthenticationPrincipal Jwt jwt) {
         return taskService.changeStatus(task, JwtUtils.getUserId(jwt));
+    }
+
+    @PutMapping("/{taskId}/create-penalty")
+    @Operation(summary = "Изменения статуса созданного штрафа", description = "Позволяет пометить в задаче, что штраф для неё создан")
+    public TaskDto changePenaltyStatus(@PathVariable UUID taskId, @RequestParam boolean isPenaltyCreated) {
+        return taskService.changePenaltyStatus(taskId, isPenaltyCreated);
     }
 
     @DeleteMapping("/{taskId}")

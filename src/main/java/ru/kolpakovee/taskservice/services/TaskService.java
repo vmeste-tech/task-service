@@ -58,6 +58,7 @@ public class TaskService {
         return new ChangeStatusResponse(taskEntity.getId(), taskEntity.getStatus());
     }
 
+    @Transactional
     public List<TaskDto> getTasks(UUID apartmentId, LocalDate startDate, LocalDate endDate) {
         List<RuleDto> rules = rulesServiceClient.getApartmentRules(apartmentId).stream()
                 .filter(r -> r.status().equals(RuleStatus.ACCEPTED))
@@ -87,9 +88,10 @@ public class TaskService {
                             .assignedTo(assignedUser.id())
                             .scheduledAt(date)
                             .description(rule.description())
-                            .isPenaltyCreated(false)
+                            .penaltyCreated(false)
                             .build();
                     tasks.add(newTask);
+                    taskRepository.save(TaskMapper.INSTANCE.toEntity(newTask));
                 }
             }
         }
@@ -102,6 +104,23 @@ public class TaskService {
     public void deleteTask(UUID taskId, UUID userId) {
         producer.send(userId, NotificationMessages.REMOVE_TASK);
         taskRepository.deleteById(taskId);
+    }
+
+    public List<TaskDto> getOverdueTasks(UUID apartmentId) {
+        return taskRepository.findByApartmentId(apartmentId).stream()
+                .map(TaskMapper.INSTANCE::toDto)
+                .filter(t -> t.scheduledAt().isBefore(ZonedDateTime.now()))
+                .filter(t -> !t.status().equals(TaskStatus.COMPLETED))
+                .toList();
+    }
+
+    public TaskDto changePenaltyStatus(UUID taskId, boolean isPenaltyCreated) {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found!"));
+
+        task.setPenaltyCreated(isPenaltyCreated);
+
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(task));
     }
 
     /**
@@ -138,13 +157,5 @@ public class TaskService {
 
         int userIndex = (startIndex + 1) % activeUsers.size();
         return activeUsers.get(userIndex);
-    }
-
-    public List<TaskDto> getOverdueTasks(UUID apartmentId) {
-        return taskRepository.findByApartmentId(apartmentId).stream()
-                .map(TaskMapper.INSTANCE::toDto)
-                .filter(t -> t.scheduledAt().isBefore(ZonedDateTime.now()))
-                .filter(t -> !t.status().equals(TaskStatus.COMPLETED))
-                .toList();
     }
 }

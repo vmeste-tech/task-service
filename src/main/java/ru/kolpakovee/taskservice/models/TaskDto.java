@@ -16,6 +16,6 @@ public record TaskDto(
         UUID apartmentId,
         UUID assignedTo,
         UUID ruleId,
-        boolean isPenaltyCreated
+        boolean penaltyCreated
 ) {
 }
