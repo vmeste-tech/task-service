@@ -73,6 +73,11 @@ public class TaskService {
                 .toList());
 
         for (RuleDto rule : rules) {
+            // Если не нужно создавать задачу, просто пропустим
+            if (!rule.autoCreateTasks()) {
+                continue;
+            }
+
             List<ZonedDateTime> occurrenceDates = rule.getOccurrenceDateTimes(startDate, endDate);
             Collections.sort(occurrenceDates);
 
@@ -96,9 +101,10 @@ public class TaskService {
             }
         }
 
-        tasks.sort(Comparator.comparing(TaskDto::scheduledAt));
-
-        return tasks;
+        return tasks.stream()
+                .filter(t -> t.scheduledAt().toLocalDate().isBefore(endDate))
+                .sorted(Comparator.comparing(TaskDto::scheduledAt))
+                .toList();
     }
 
     public void deleteTask(UUID taskId, UUID userId) {
@@ -110,7 +116,7 @@ public class TaskService {
         return taskRepository.findByApartmentId(apartmentId).stream()
                 .map(TaskMapper.INSTANCE::toDto)
                 .filter(t -> t.scheduledAt().isBefore(ZonedDateTime.now()))
-                .filter(t -> !t.status().equals(TaskStatus.COMPLETED))
+                .filter(t -> TaskStatus.isOverdue(t))
                 .toList();
     }
 

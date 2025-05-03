@@ -25,13 +25,18 @@ public record RuleDto(
         RuleStatus status,
         double penaltyAmount,
         String cronExpression,
-        String timeZone
+        String timeZone,
+        boolean autoCreateTasks
 ) {
     /**
      * Вычисляет все временные метки (ZonedDateTime) в интервале [startDate, endDate],
      * когда правило должно сработать согласно cron-выражению.
      */
     public List<ZonedDateTime> getOccurrenceDateTimes(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now())) {
+            startDate = LocalDate.now();
+        }
+
         CronDefinition cronDefinition = instanceDefinitionFor(CronType.UNIX);
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse(this.cronExpression);
